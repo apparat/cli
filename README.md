@@ -1,4 +1,4 @@
-# apparat/server
+# apparat/cli
 
 Purpose of this module:
 
