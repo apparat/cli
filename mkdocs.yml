@@ -1,0 +1,8 @@
+site_name: apparat/cli
+site_description: Apparat command line interface
+site_author: Joschi Kuphal
+repo_url: https://github.com/apparat/cli/
+docs_dir: doc
+pages:
+- Home: 'index.md'
+- To-Do: 'todo.md'

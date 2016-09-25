@@ -1,0 +1,53 @@
+{
+  "name": "apparat/cli",
+  "description": "Apparat command line interface",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joschi Kuphal",
+      "email": "joschi@kuphal.net"
+    }
+  ],
+  "minimum-stability": "RC",
+  "require": {
+    "php": ">=5.6.0",
+    "apparat/server": "@dev",
+    "apparat/object": "@dev",
+    "apparat/resource": "@dev",
+    "apparat/kernel": "@dev",
+    "dominicsayers/isemail": "@dev",
+    "symfony/console": "@dev"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:apparat/server.git",
+      "reference": "master"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:apparat/object.git",
+      "reference": "master"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:apparat/resource.git",
+      "reference": "master"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:apparat/kernel.git",
+      "reference": "master"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:dominicsayers/isemail.git",
+      "reference": "master"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Apparat\\": "src/"
+    }
+  }
+}
