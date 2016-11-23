@@ -37,6 +37,7 @@
 
 namespace Apparat\Cli\Ports;
 
+use Apparat\Cli\Infrastructure\Command\Create\Object\NoteCommand;
 use Apparat\Cli\Infrastructure\Command\Create\Repository\FileCommmand;
 use Apparat\Kernel\Ports\Kernel;
 use Symfony\Component\Console\Application;
@@ -46,4 +47,5 @@ require dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR.'vendor'.DIRECTOR
 $application = Kernel::create(Application::class);
 $application->setName('Apparat command line interface');
 $application->add(Kernel::create(FileCommmand::class));
+$application->add(Kernel::create(NoteCommand::class));
 $application->run();
