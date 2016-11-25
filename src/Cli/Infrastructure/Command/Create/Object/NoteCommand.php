@@ -36,11 +36,8 @@
 
 namespace Apparat\Cli\Infrastructure\Command\Create\Object;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 
 /**
  * CLI command for creating a note object
@@ -48,10 +45,10 @@ use Symfony\Component\Console\Question\Question;
  * @package Apparat\Cli
  * @subpackage Apparat\Cli\Infrastructure
  */
-class NoteCommand extends Command
+class NoteCommand extends AbstractObjectCreatorCommand
 {
     /**
-     * Configures the current command.
+     * Configures the current command
      */
     protected function configure()
     {
@@ -64,14 +61,7 @@ class NoteCommand extends Command
         // Full command description when run with "--help"
         $this->setHelp('This command lets you create a new note object inside a repository.');
 
-        // Add the repository root argument
-        $defaultRepositoryRoot = getenv('APPARAT_CLI_DEFAULT_REPOSITORY_ROOT');
-        $this->addArgument(
-            'root',
-            empty($defaultRepositoryRoot) ? InputArgument::REQUIRED : InputArgument::OPTIONAL,
-            'The root directory of the repository',
-            empty($defaultRepositoryRoot) ? null : $defaultRepositoryRoot
-        );
+        parent::configure();
     }
 
     /**
@@ -79,34 +69,18 @@ class NoteCommand extends Command
      *
      * @param InputInterface $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
+     * @return void
+     * @see http://symfony.com/doc/current/components/console/helpers/questionhelper.html
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        parent::execute($input, $output);
+
         $root = $input->getArgument('root');
 
-        // Ask for the author
-        $defaultAuthor = getenv('APPARAT_CLI_DEFAULT_AUTHOR');
-        $helper = $this->getHelper('question');
-        $question = new Question('Who are you?'.(empty($defaultAuthor) ? '' : " [$defaultAuthor]").' ');
-        $question->setValidator(function ($answer) {
-            if (!strlen(trim($answer))) {
-                throw new \RuntimeException(
-                    'The author must not be empty!'
-                );
-            }
-            return $answer;
-        });
-        $author = $helper->ask($input, $output, $question);
+        echo $this->getAnswer('author');
 
-        echo $author;
 
-//        $repository = RepositoryFacade::create(
-//            '',
-//            [
-//                'type' => FileAdapterStrategy::TYPE,
-//                'root' => $root
-//            ]
-//        );
 //        $output->writeln(
 //            ($repository instanceof RepositoryFacade) ?
 //                'Repository successfully created at '.realpath($root) :
