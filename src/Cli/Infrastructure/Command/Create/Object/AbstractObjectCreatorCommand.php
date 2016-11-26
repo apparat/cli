@@ -36,6 +36,7 @@
 
 namespace Apparat\Cli\Infrastructure\Command\Create\Object;
 
+use Apparat\Cli\Infrastructure\Console\RepeatedQuestion;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -71,6 +72,20 @@ abstract class AbstractObjectCreatorCommand extends Command
     protected $answers = [];
 
     /**
+     * Return an answer that has been given to a question
+     *
+     * @param string $name Answer name
+     * @return mixed Answer content
+     */
+    public function getAnswer($name)
+    {
+        if (!array_key_exists($name, $this->answers)) {
+
+        }
+        return $this->answers[$name];
+    }
+
+    /**
      * Configures the current command
      */
     protected function configure()
@@ -94,7 +109,6 @@ abstract class AbstractObjectCreatorCommand extends Command
      * @param OutputInterface $output An OutputInterface instance
      * @return void
      * @see http://symfony.com/doc/current/components/console/helpers/questionhelper.html
-     * @see https://github.com/symfony/symfony/issues/19678
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -119,9 +133,31 @@ abstract class AbstractObjectCreatorCommand extends Command
             ['eins', 'zwei', 'drei']
         );
 
+        // Name
+        $this->askFor(
+            $input,
+            $output,
+            'name',
+            'What\'s the name of the note?'
+        );
+
+        // Content
+        $this->listenFor(
+            $input,
+            $output,
+            'content',
+            'What\'s the note?'
+        );
+
+        // Summary
+        $this->askFor(
+            $input,
+            $output,
+            'summary',
+            'Can you summarize the note?'
+        );
+
         //ArticleProperties::LOCATION => [ArticleProperties::COLLECTION, ArticleProperties::LOCATION],
-        //ArticleProperties::NAME => MetaProperties::PROPERTY_TITLE,
-        //ArticleProperties::SUMMARY => MetaProperties::PROPERTY_ABSTRACT,
         //ArticleProperties::CONTENT => ObjectInterface::PROPERTY_PAYLOAD,
     }
 
@@ -177,15 +213,41 @@ abstract class AbstractObjectCreatorCommand extends Command
     }
 
     /**
-     * Return an answer that has been given to a question
+     * Listen for a multiline text
      *
-     * @param string $name Answer name
-     * @return mixed Answer content
+     * @param InputInterface $input An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     * @param string $name Dialog question name
+     * @param string $message Question message
+     * @param array $validate Validation checks and messages
+     * @param string|null $default Default value
+     * @see https://github.com/symfony/symfony/issues/19678
+     * @see https://github.com/symfony/symfony/pull/19699
      */
-    public function getAnswer($name) {
-        if (!array_key_exists($name, $this->answers)) {
-
+    protected function listenFor(
+        InputInterface $input,
+        OutputInterface $output,
+        $name,
+        $message,
+        array $validate =
+        [self::VALIDATE_NONE => null],
+        $default = null
+    ) {
+        /** @var QuestionHelper $helper */
+        $helper = $this->getHelper('question');
+        $question = new RepeatedQuestion(
+            $message,
+            call_user_func(
+                function () use ($default) {
+                    do {
+                        $answer = (yield $default);
+                    } while ($answer !== $default);
+                }
+            )
+        );
+        foreach ($helper->ask($input, $output, $question) as $answer) {
+            echo $answer.PHP_EOL;
+            // do what you want
         }
-        return $this->answers[$name];
     }
 }
