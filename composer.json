@@ -9,21 +9,24 @@
     }
   ],
   "minimum-stability": "RC",
-  "bin": ["src/Cli/Ports/Apparat.php"],
+  "bin": [
+    "src/Cli/Ports/Apparat.php"
+  ],
   "bin-dir": "bin",
   "require": {
     "php": ">=5.6.0",
-    "apparat/object": "@dev",
-    "apparat/resource": "@dev",
-    "apparat/kernel": "@dev",
-    "dominicsayers/isemail": "@dev",
-    "symfony/console": "@dev"
+    "apparat/object": "dev-master",
+    "dominicsayers/isemail": "dev-master",
+    "symfony/console": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.3",
     "satooshi/php-coveralls": "^1.0",
     "codeclimate/php-test-reporter": "dev-master",
-    "apparat/dev": "@dev"
+    "apparat/dev": "@dev",
+    "apparat/resource": "@dev",
+    "apparat/kernel": "@dev",
+    "clue/graph-composer": "dev-master"
   },
   "repositories": [
     {
@@ -54,6 +57,11 @@
     {
       "type": "vcs",
       "url": "git@github.com:dominicsayers/isemail.git",
+      "reference": "master"
+    },
+    {
+      "type": "git",
+      "url": "git@github.com:jkphl/graph-composer.git",
       "reference": "master"
     }
   ],
